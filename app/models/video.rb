@@ -4,9 +4,12 @@ class Video < ApplicationRecord
   belongs_to :category
   has_one_attached :file
 
-  has_one_attached :thumbnail do |attachable|
-    attachable.variant :thumb_small, resize: '64x64'
-    attachable.variant :thumb_medium, resize: '128x128'
-    attachable.variant :thumb_big, resize: '256x256'
-  end
+  has_one_attached :thumbnail
+  has_one_attached :thumbnail_64x64
+  has_one_attached :thumbnail_128x128
+  has_one_attached :thumbnail_256x256
+
+
+  validates :file, size: { less_than: 200.megabytes, message: 'File to big' }
+  validates :file, content_type: { in: %w[video/mp4 video/mov], message: 'Not the correct format' }
 end

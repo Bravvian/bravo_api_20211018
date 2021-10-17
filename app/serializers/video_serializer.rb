@@ -15,25 +15,19 @@ class VideoSerializer
         id: record.id,
         title: record.title,
         synopsis: record.synopsis,
-        thumbnail: record.thumbnail,
-        url: url(record),
+        thumbnail: url(record.thumbnail),
+        thumbnail_64x64: url(record.thumbnail_64x64),
+        thumbnail_128x128: url(record.thumbnail_128x128),
+        thumbnail_256x256: url(record.thumbnail_256x256),
+        url: url(record.file),
         category: record.category.name
       }
     end
   end
 
-  def url_2(record)
-    # ActiveStorage::Blob.service.send(:path_for, attachment.blob.key)
-    # Rails.application.routes.url_helpers.rails_blob_path(record.file, only_path: true)
-    record.file.attached? ? ActiveStorage::Blob.service.send(:path_for, record.file.attachment.blob.key) : nil
-  end
+  def url(file)
+    return unless file.attached?
 
-  def url(record)
-    return unless record.file.attached?
-
-    record.file.blob.attributes
-          .slice('filename', 'byte_size')
-          .merge(url: url_for(record.file))
-          .tap { |attrs| attrs['name'] = attrs.delete('filename') }
+    url_for(file)
   end
 end
