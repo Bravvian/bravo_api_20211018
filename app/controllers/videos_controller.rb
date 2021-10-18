@@ -22,7 +22,7 @@ class VideosController < ApplicationController
   end
 
   def show
-    @video = Video.find(filtered_params[:id])
+    @video = Video.find(params[:id])
 
     render status: :ok, json: @video
   end
@@ -40,7 +40,7 @@ class VideosController < ApplicationController
     config.each do |attach_name, size|
       image = MiniMagick::Image.read(@video.thumbnail.download)
       image.resize(size)
-      @video.send(attach_name).attach(io:  File.open(image.tempfile), filename: "#{attach_name}.png")
+      @video.send(attach_name).attach(io: File.open(image.tempfile), filename: "#{attach_name}.png")
     end
   end
 
