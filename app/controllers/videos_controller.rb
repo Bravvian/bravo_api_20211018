@@ -9,9 +9,9 @@ class VideosController < ApplicationController
 
   def create
     category = Category.find_by(id: filtered_params[:category_id])
-    @video = Video.create(title: filtered_params[:title], category: category)
 
-    @video.file.attach(filtered_params[:file])
+    @video = Video.create(title: filtered_params[:title], category: category, file: filtered_params[:file])
+
     save_thumbnails
 
     if @video.file.attached?
